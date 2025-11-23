@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Exercise - {{ lesson.title }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>Exercise</h1>
+        <p class="text-muted">Lesson: {{ lesson.title }}</p>
+    </div>
+    <a href="{{ url_for('learning.view_lesson', lesson_id=lesson.id) }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Lesson
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <span class="badge bg-info me-2">{{ exercise.type|replace('_', ' ')|title }}</span>
+                    {{ exercise.question }}
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="exercise-form">
+                    {% if exercise.type == 'multiple_choice' %}
+                        <div class="list-group">
+                            {% for option in exercise.options %}
+                            <div class="list-group-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer" 
+                                           value="{{ loop.index0 }}" id="option{{ loop.index0 }}">
+                                    <label class="form-check-label" for="option{{ loop.index0 }}">
+                                        {{ option }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% elif exercise.type == 'translation' or exercise.type == 'fill_blank' %}
+                        <div class="mb-3">
+                            <label for="answer-text" class="form-label">Your Answer:</label>
+                            <input type="text" class="form-control" id="answer-text" name="answer" 
+                                   placeholder="Type your answer here...">
+                        </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <button type="submit" class="btn btn-primary" id="submit-btn">
+                            <i class="fas fa-check"></i> Submit Answer
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" id="reset-btn">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Result Section -->
+                <div id="result-section" class="mt-4" style="display: none;">
+                    <div class="alert" id="result-alert">
+                        <h6 id="result-title"></h6>
+                        <p id="result-message"></p>
+                        <div id="explanation-section" class="mt-3">
+                            <strong>Explanation:</strong>
+                            <p id="result-explanation"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Exercise Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-lightbulb text-warning"></i> Read the question carefully</li>
+                    <li><i class="fas fa-lightbulb text-warning"></i> Take your time to think</li>
+                    <li><i class="fas fa-lightbulb text-warning"></i> Review the lesson content if needed</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Quick Reference</h6>
+            </div>
+            <div class="card-body">
+                {% if lesson.vocabulary %}
+                <h6>Vocabulary from this lesson:</h6>
+                {% for word in lesson.vocabulary[:3] %}
+                <div class="mb-2">
+                    <span class="chinese-text">{{ word.chinese }}</span> - {{ word.english }}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    const exerciseId = '{{ exercise_id }}';
+    const lessonId = '{{ lesson_id }}';
+    
+    $('#exercise-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        // Get the answer
+        let answer;
+        if ($('input[name="answer"]:checked').length > 0) {
+            answer = $('input[name="answer"]:checked').val();
+        } else if ($('#answer-text').val()) {
+            answer = $('#answer-text').val();
+        } else {
+            alert('Please select or enter an answer');
+            return;
+        }
+        
+        // Disable form during submission
+        $('#submit-btn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Checking...');
+        
+        // Submit answer via AJAX
+        $.ajax({
+            url: '/api/exercises/' + exerciseId + '/attempt',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                lesson_id: lessonId,
+                answer: answer
+            }),
+            success: function(response) {
+                $('#submit-btn').prop('disabled', false).html('<i class="fas fa-check"></i> Submit Answer');
+                
+                if (response.success) {
+                    const result = response.data;
+                    const resultSection = $('#result-section');
+                    const resultAlert = $('#result-alert');
+                    
+                    // Show result
+                    resultSection.show();
+                    
+                    if (result.correct) {
+                        resultAlert.removeClass('alert-danger').addClass('alert-success');
+                        $('#result-title').html('<i class="fas fa-check-circle"></i> Correct!');
+                        $('#result-message').text('Great job! Your answer is correct.');
+                    } else {
+                        resultAlert.removeClass('alert-success').addClass('alert-danger');
+                        $('#result-title').html('<i class="fas fa-times-circle"></i> Incorrect');
+                        $('#result-message').text('Your answer is not correct. The correct answer is: ' + result.correct_answer);
+                    }
+                    
+                    $('#result-explanation').text(result.explanation);
+                    
+                    // Disable form after submission
+                    $('#exercise-form input, #exercise-form button').prop('disabled', true);
+                    
+                    // Scroll to result
+                    $('html, body').animate({
+                        scrollTop: resultSection.offset().top - 100
+                    }, 500);
+                }
+            },
+            error: function(xhr) {
+                $('#submit-btn').prop('disabled', false).html('<i class="fas fa-check"></i> Submit Answer');
+                
+                let errorMessage = 'An error occurred while checking your answer.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMessage = xhr.responseJSON.error;
+                }
+                
+                alert(errorMessage);
+            }
+        });
+    });
+    
+    $('#reset-btn').on('click', function() {
+        $('#exercise-form')[0].reset();
+        $('#result-section').hide();
+        $('#exercise-form input, #exercise-form button').prop('disabled', false);
+    });
+});
+</script>
+{% endblock %}

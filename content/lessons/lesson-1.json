@@ -1,0 +1,62 @@
+{
+  "id": "lesson-1",
+  "title": "Basic Greetings",
+  "description": "Learn essential Chinese greetings and introductions",
+  "level": "beginner",
+  "category": "conversation",
+  "vocabulary": [
+    {
+      "chinese": "你好",
+      "pinyin": "nǐ hǎo",
+      "english": "Hello",
+      "audio": "audio/ni-hao.mp3"
+    },
+    {
+      "chinese": "谢谢",
+      "pinyin": "xiè xiè",
+      "english": "Thank you",
+      "audio": "audio/xie-xie.mp3"
+    },
+    {
+      "chinese": "不客气",
+      "pinyin": "bú kè qì",
+      "english": "You're welcome",
+      "audio": "audio/bu-ke-qi.mp3"
+    }
+  ],
+  "grammar": [
+    {
+      "title": "Basic Sentence Structure",
+      "explanation": "Chinese sentences typically follow Subject-Verb-Object (SVO) structure, similar to English.",
+      "examples": [
+        {
+          "chinese": "我爱你",
+          "pinyin": "wǒ ài nǐ",
+          "english": "I love you"
+        },
+        {
+          "chinese": "他学习中文",
+          "pinyin": "tā xuéxí zhōngwén",
+          "english": "He studies Chinese"
+        }
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "id": "ex-1-1",
+      "type": "multiple_choice",
+      "question": "How do you say 'Hello' in Chinese?",
+      "options": ["你好", "谢谢", "再见", "对不起"],
+      "correct_answer": 0,
+      "explanation": "你好 (nǐ hǎo) is the standard way to say hello in Chinese."
+    },
+    {
+      "id": "ex-1-2",
+      "type": "translation",
+      "question": "Translate 'Thank you' to Chinese",
+      "correct_answer": "谢谢",
+      "explanation": "谢谢 (xiè xiè) means thank you in Chinese."
+    }
+  ]
+}

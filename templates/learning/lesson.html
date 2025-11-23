@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson.title }} - Chinese Learning{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>{{ lesson.title }}</h1>
+        <p class="lead text-muted">{{ lesson.description }}</p>
+    </div>
+    <div>
+        <span class="badge bg-primary">{{ lesson.level|title }}</span>
+        <span class="badge bg-secondary">{{ lesson.category|title }}</span>
+    </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="mb-4">
+    <div class="d-flex justify-content-between mb-2">
+        <span>Lesson Progress</span>
+        <span id="progress-text">0%</span>
+    </div>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+    </div>
+</div>
+
+<!-- Navigation Tabs -->
+<ul class="nav nav-tabs mb-4" id="lessonTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="vocabulary-tab" data-bs-toggle="tab" data-bs-target="#vocabulary" type="button" role="tab">
+            <i class="fas fa-language"></i> Vocabulary
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="grammar-tab" data-bs-toggle="tab" data-bs-target="#grammar" type="button" role="tab">
+            <i class="fas fa-book"></i> Grammar
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="exercises-tab" data-bs-toggle="tab" data-bs-target="#exercises" type="button" role="tab">
+            <i class="fas fa-tasks"></i> Exercises
+        </button>
+    </li>
+</ul>
+
+<!-- Tab Content -->
+<div class="tab-content" id="lessonTabContent">
+    <!-- Vocabulary Tab -->
+    <div class="tab-pane fade show active" id="vocabulary" role="tabpanel">
+        <div class="row">
+            {% for word in lesson.vocabulary %}
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title chinese-text">{{ word.chinese }}</h5>
+                        <p class="card-text pinyin">{{ word.pinyin }}</p>
+                        <p class="card-text"><strong>{{ word.english }}</strong></p>
+                        {% if word.audio %}
+                        <button class="btn btn-sm btn-outline-primary" onclick="playAudio('{{ word.audio }}')">
+                            <i class="fas fa-volume-up"></i> Play
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Grammar Tab -->
+    <div class="tab-pane fade" id="grammar" role="tabpanel">
+        {% for grammar_point in lesson.grammar %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">{{ grammar_point.title }}</h5>
+            </div>
+            <div class="card-body">
+                <p>{{ grammar_point.explanation }}</p>
+                
+                {% if grammar_point.examples %}
+                <h6 class="mt-3">Examples:</h6>
+                {% for example in grammar_point.examples %}
+                <div class="border rounded p-3 mb-2">
+                    <div class="chinese-text">{{ example.chinese }}</div>
+                    <div class="pinyin text-muted">{{ example.pinyin }}</div>
+                    <div class="text-muted">{{ example.english }}</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Exercises Tab -->
+    <div class="tab-pane fade" id="exercises" role="tabpanel">
+        <div class="row">
+            {% for exercise in lesson.exercises %}
+            <div class="col-md-6 mb-3">
+                <div class="card exercise-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="card-title">Exercise {{ loop.index }}</h6>
+                            <span class="badge bg-info">{{ exercise.type|replace('_', ' ')|title }}</span>
+                        </div>
+                        <p class="card-text">{{ exercise.question }}</p>
+                        <a href="{{ url_for('learning.view_exercise', lesson_id=lesson.id, exercise_id=exercise.id) }}" 
+                           class="btn btn-primary btn-sm">
+                            Start Exercise <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Simple progress tracking (in a real app, this would be saved to a database)
+let completedSections = new Set();
+
+function updateProgress() {
+    const totalSections = 3; // vocabulary, grammar, exercises
+    const completed = completedSections.size;
+    const percentage = Math.round((completed / totalSections) * 100);
+    
+    document.getElementById('progress-bar').style.width = percentage + '%';
+    document.getElementById('progress-text').textContent = percentage + '%';
+}
+
+// Mark sections as viewed
+document.getElementById('vocabulary-tab').addEventListener('shown.bs.tab', function() {
+    completedSections.add('vocabulary');
+    updateProgress();
+});
+
+document.getElementById('grammar-tab').addEventListener('shown.bs.tab', function() {
+    completedSections.add('grammar');
+    updateProgress();
+});
+
+document.getElementById('exercises-tab').addEventListener('shown.bs.tab', function() {
+    completedSections.add('exercises');
+    updateProgress();
+});
+
+function playAudio(audioFile) {
+    // In a real implementation, this would play the audio file
+    console.log('Playing audio:', audioFile);
+    alert('Audio playback would be implemented here');
+}
+</script>
+{% endblock %}

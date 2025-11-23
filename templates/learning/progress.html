@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Progress - Chinese Learning{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-chart-line"></i> Your Learning Progress</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h2 class="text-primary">0</h2>
+                <p class="card-text">Lessons Completed</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h2 class="text-success">0</h2>
+                <p class="card-text">Exercises Completed</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h2 class="text-info">0%</h2>
+                <p class="card-text">Success Rate</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h2 class="text-warning">0</h2>
+                <p class="card-text">Day Streak</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">No recent activity yet. Start learning to see your progress here!</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Achievements</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center text-muted">
+                    <i class="fas fa-trophy fa-3x mb-3"></i>
+                    <p>Complete lessons to earn achievements!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
