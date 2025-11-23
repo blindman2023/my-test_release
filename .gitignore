@@ -114,3 +114,12 @@ dmypy.json
 # jupyterlite
 *.doit.db
 _output
+
+# Flask app
+instance/
+.env
+.env.local
+.env.*.local
+*.db
+logs/
+migrations/versions/

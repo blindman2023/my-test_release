@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - Flask App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="mb-4">Available Courses</h1>
+        
+        <div class="alert alert-info">
+            <p>Course listings coming soon!</p>
+        </div>
+        
+        <a href="{{ url_for('learning.index') }}" class="btn btn-secondary">Back to Learning</a>
+    </div>
+</div>
+{% endblock %}

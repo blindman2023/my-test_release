@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Progress - Flask App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="mb-4">Your Learning Progress</h1>
+        
+        <div class="alert alert-info">
+            <p>Progress tracking coming soon!</p>
+        </div>
+        
+        <a href="{{ url_for('learning.index') }}" class="btn btn-secondary">Back to Learning</a>
+    </div>
+</div>
+{% endblock %}
