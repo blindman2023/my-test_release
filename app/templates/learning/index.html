@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Learning - Flask App{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="mb-4">学习 (Learning)</h1>
+        <p class="lead">Explore our comprehensive learning modules and courses.</p>
+        
+        <div class="row mt-5">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">View Courses</h5>
+                        <p class="card-text">Browse available courses and learning materials.</p>
+                        <a href="{{ url_for('learning.courses') }}" class="btn btn-primary">View Courses</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Your Progress</h5>
+                        <p class="card-text">Track your learning progress and achievements.</p>
+                        <a href="{{ url_for('learning.progress') }}" class="btn btn-primary">View Progress</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
