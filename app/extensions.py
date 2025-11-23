@@ -21,4 +21,10 @@ def init_extensions(app):
     login_manager.login_message = 'Please log in to access this page.'
     login_manager.login_message_category = 'info'
     
+    # Setup user loader for testing
+    @login_manager.user_loader
+    def load_user(user_id):
+        """Load user by ID. Placeholder for actual implementation."""
+        return None
+    
     return db, migrate, login_manager

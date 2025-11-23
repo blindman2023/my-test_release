@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required
 
-learning_bp = Blueprint('learning', __name__, url_prefix='/learning', url_defaults={'lang': 'zh'})
+learning_bp = Blueprint('learning', __name__, url_prefix='/learning')
 
 
 @learning_bp.route('/')
