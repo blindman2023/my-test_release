@@ -1,0 +1,20 @@
+{
+  "lessons": [
+    {
+      "id": "lesson-1",
+      "title": "Basic Greetings",
+      "description": "Learn essential Chinese greetings and introductions",
+      "level": "beginner",
+      "category": "conversation",
+      "estimated_duration": "15 minutes"
+    },
+    {
+      "id": "lesson-2",
+      "title": "Numbers and Time",
+      "description": "Learn Chinese numbers and how to tell time",
+      "level": "beginner",
+      "category": "basics",
+      "estimated_duration": "20 minutes"
+    }
+  ]
+}

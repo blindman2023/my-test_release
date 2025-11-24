@@ -38,3 +38,30 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Flask
+instance/
+.webassets-cache
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+test_content/
+test_reports/
